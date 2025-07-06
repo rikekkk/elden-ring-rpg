@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elden Ring RPG – Ficha</title>
+  <style>
+    @font-face {
+      font-family: 'Mantinia';
+      src: url('Mantinia Regular.otf') format('opentype');
+    }
+
+    body {
+      font-family: 'Mantinia', serif;
+      background: url('https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/library_hero.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: rgba(23, 22, 20, 0.8);
+      padding: 1rem;
+      text-align: center;
+      border-bottom: 1px solid #444;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.4rem;
+      color: #dec67a;
+      letter-spacing: 1px;
+    }
+    main {
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
+      background-color: rgba(14, 14, 14, 0.85);
+      position: relative;
+    }
+    label {
+      display: block;
+      margin: 1rem 0 0.5rem;
+    }
+    input[type="text"], textarea, select {
+      width: 100%;
+      padding: 0.5rem;
+      background: #2a292d;
+      border: 1px solid #555;
+      color: #f5f5f5;
+    }
+    input[type="file"] {
+      margin-top: 0.5rem;
+    }
+    #foto-container {
+      position: absolute;
+      top: 2rem;
+      left: -250px;
+      width: 200px;
+    }
+    #foto-container img {
+      width: 100%;
+      border: 2px solid #555;
+      border-radius: 4px;
+    }
+    #logo {
+      display: block;
+      width: 200px;
+      margin: 0 auto 1rem;
+    }
+    section {
+      margin-top: 2rem;
+      border-top: 1px solid #444;
+      padding-top: 2rem;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #dec67a;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img id="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Elden_Ring_logo.svg/512px-Elden_Ring_logo.svg.png" alt="Elden Ring Logo">
+    <h1>Elden Ring RPG – Ficha do Personagem</h1>
+  </header>
+  <main>
+    <div id="foto-container">
+      <img id="preview" class="preview" />
+    </div>
+    <form id="fichaForm">
+      <label for="nome">Nome do Personagem</label>
+      <input type="text" id="nome" name="nome" />
+
+      <label for="classe">Classe</label>
+      <select id="classe" name="classe">
+        <option value="vagabundo">Vagabundo</option>
+        <option value="astrologo">Astrólogo</option>
+        <option value="profeta">Profeta</option>
+        <option value="bandido">Bandido</option>
+        <option value="prisioneiro">Prisioneiro</option>
+        <option value="guerreiro">Guerreiro</option>
+        <option value="miseravel">Miserável</option>
+        <option value="confessor">Confessor</option>
+        <option value="samurai">Samurai</option>
+        <option value="retalhador">Retalhador</option>
+        <option value="desajustado">Desajustado</option>
+      </select>
+
+      <label for="historia">História</label>
+      <textarea id="historia" name="historia" rows="5"></textarea>
+
+      <label for="foto">Foto do Personagem</label>
+      <input type="file" id="foto" name="foto" accept="image/*" onchange="previewImagem(event)" />
+
+      <section>
+        <h2>Inventário</h2>
+        <label for="equipamento">Equipamento</label>
+        <textarea id="equipamento" rows="5"></textarea>
+
+        <label for="itens">Itens</label>
+        <textarea id="itens" rows="5"></textarea>
+
+        <label for="talismas">Talismãs</label>
+        <textarea id="talismas" rows="3"></textarea>
+
+        <label for="encantamentos">Encantamentos</label>
+        <textarea id="encantamentos" rows="3"></textarea>
+
+        <label for="carga">Carga Total</label>
+        <input type="text" id="carga" name="carga" />
+      </section>
+
+      <button type="button" onclick="salvarFicha()">Salvar Ficha</button>
+      <button type="button" onclick="carregarFicha()">Carregar Ficha</button>
+    </form>
+  </main>
+  <script>
+    function previewImagem(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          document.getElementById("preview").src = reader.result;
+          localStorage.setItem('foto', reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function salvarFicha() {
+      const ficha = {
+        nome: document.getElementById('nome').value,
+        classe: document.getElementById('classe').value,
+        historia: document.getElementById('historia').value,
+        equipamento: document.getElementById('equipamento').value,
+        itens: document.getElementById('itens').value,
+        talismas: document.getElementById('talismas').value,
+        encantamentos: document.getElementById('encantamentos').value,
+        carga: document.getElementById('carga').value,
+      };
+      localStorage.setItem('fichaPersonagem', JSON.stringify(ficha));
+      alert('Ficha salva com sucesso!');
+    }
+
+    function carregarFicha() {
+      const ficha = JSON.parse(localStorage.getItem('fichaPersonagem'));
+      if (ficha) {
+        document.getElementById('nome').value = ficha.nome;
+        document.getElementById('classe').value = ficha.classe;
+        document.getElementById('historia').value = ficha.historia;
+        document.getElementById('equipamento').value = ficha.equipamento;
+        document.getElementById('itens').value = ficha.itens;
+        document.getElementById('talismas').value = ficha.talismas;
+        document.getElementById('encantamentos').value = ficha.encantamentos;
+        document.getElementById('carga').value = ficha.carga;
+      }
+      const img = localStorage.getItem('foto');
+      if (img) {
+        document.getElementById('preview').src = img;
+      }
+    }
+
+    window.onload = carregarFicha;
+  </script>
+</body>
+</html>
